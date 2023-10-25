@@ -21,6 +21,6 @@ class ProfileController (private val profileService : ProfileService) {
     fun editProfile(@RequestBody profileDTO: ProfileDTO?, @PathVariable email:String?) : ProfileDTO {
         if (profileDTO == null) return ProfileDTO("","","","")
         if (email == null) return ProfileDTO("","","","")
-        return profileService.putProfile(profileDTO,email)
+        return profileService.editProfile(profileDTO,email)
     }
 }
