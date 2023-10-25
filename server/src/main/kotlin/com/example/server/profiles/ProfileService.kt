@@ -6,5 +6,5 @@ interface ProfileService  {
 
     fun addProfile(profileDTO: ProfileDTO): ProfileDTO
 
-    fun putProfile(profileDTO: ProfileDTO, email: String) : ProfileDTO
+    fun editProfile(profileDTO: ProfileDTO, email: String) : ProfileDTO
 }

@@ -1,5 +1,7 @@
 package com.example.server.profiles
 
+import com.example.server.DuplicateException
+import com.example.server.NotFoundException
 import io.micrometer.observation.annotation.Observed
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
@@ -10,11 +12,11 @@ import org.springframework.stereotype.Service
 @Observed
 class ProfileServiceImpl(private val profileRepository: ProfileRepository) : ProfileService {
 
-    override fun getProfileByEmail(email: String): ProfileDTO? {
-        return profileRepository.findByIdOrNull(email)?.toDTO()
+    override fun getProfileByEmail(email: String): ProfileDTO {
+        return profileRepository.findByIdOrNull(email)?.toDTO() ?: throw NotFoundException("User not found")
     }
     override fun addProfile(profileDTO: ProfileDTO): ProfileDTO {
-        if (profileRepository.findByIdOrNull(profileDTO.email) != null) return ProfileDTO("","", "","")
+        if (profileRepository.findByIdOrNull(profileDTO.email) != null) throw DuplicateException("User already exists")
         return profileRepository.save(
             Profile(
                 email = profileDTO.email,
@@ -25,8 +27,8 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository) : Pro
         ).toDTO()
     }
 
-    override fun putProfile(profileDTO: ProfileDTO, email : String): ProfileDTO {
-        if (profileRepository.findByIdOrNull(email) != null) return ProfileDTO("","", "","")
+    override fun editProfile(profileDTO: ProfileDTO, email : String): ProfileDTO {
+        if (profileRepository.findByIdOrNull(email) != null) throw NotFoundException("User not found")
         return profileRepository.save(
             Profile(
                 email = profileDTO.email,

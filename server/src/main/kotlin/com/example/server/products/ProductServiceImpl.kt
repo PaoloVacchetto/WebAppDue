@@ -1,5 +1,6 @@
 package com.example.server.products
 
+import com.example.server.NotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.data.repository.findByIdOrNull
 
@@ -12,8 +13,8 @@ class ProductServiceImpl (private val productRepository: ProductRepository) : Pr
         return productRepository.findAll().map{it.toDTO()}
     }
 
-    override fun getProduct(ean: String): ProductDTO? {
-        return productRepository.findByIdOrNull(ean)?.toDTO()
+    override fun getProduct(ean: String): ProductDTO {
+        return productRepository.findByIdOrNull(ean)?.toDTO() ?: throw NotFoundException("Product not found")
 
     }
 
