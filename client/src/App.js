@@ -1,9 +1,12 @@
 import logo from './logo.svg';
-import './App.css';
-import Home from './components/home';
+import './css/App.css';
+import './css/styles.css';
+
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import {Container, Row} from "react-bootstrap";
-import MyNavbar from "./components/navbar";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Layout from './components/Layout'
+import Home from './components/home';
+
 
 function App() {
   return (
@@ -16,17 +19,13 @@ function App() {
 function App2(){
   return(
       <>
-          <MyNavbar></MyNavbar>
-          <Container fluid>
-              <Row className='vheight-100'>
-                  <Routes>
-                      <Route path='/' element={<Home> </Home>} />
-
-                  </Routes>
+          <Routes>
+              <Route element={<Layout></Layout>}>
+                  <Route path='/' element={<Home></Home>}></Route>
 
 
-              </Row>
-          </Container>
+              </Route>
+          </Routes>
       </>
   )
 }
