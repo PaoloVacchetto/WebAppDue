@@ -15,6 +15,9 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository) : Pro
     override fun getProfileByEmail(email: String): ProfileDTO {
         return profileRepository.findByIdOrNull(email)?.toDTO() ?: throw NotFoundException("User not found")
     }
+    override fun getProfileByEmailP(email: String): Profile {
+        return  profileRepository.findByIdOrNull(email) ?: throw NotFoundException("User not found")
+    }
     override fun addProfile(profileDTO: ProfileDTO): ProfileDTO {
         if (profileRepository.findByIdOrNull(profileDTO.email) != null) throw DuplicateException("User already exists")
         return profileRepository.save(
@@ -38,4 +41,6 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository) : Pro
             )
         ).toDTO()
     }
+
+
 }

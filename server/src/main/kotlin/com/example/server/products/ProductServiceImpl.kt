@@ -18,4 +18,8 @@ class ProductServiceImpl (private val productRepository: ProductRepository) : Pr
 
     }
 
+    override fun getByIdProduct(ean: String): Product {
+        return productRepository.findByIdOrNull(ean) ?: throw NotFoundException ("Product not found")
+    }
+
 }

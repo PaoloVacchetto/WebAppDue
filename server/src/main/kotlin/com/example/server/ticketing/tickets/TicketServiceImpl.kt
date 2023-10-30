@@ -1,0 +1,69 @@
+package com.example.server.ticketing.tickets
+
+import com.example.server.DuplicateException
+import com.example.server.NotFoundException
+import com.example.server.NotValidException
+import com.example.server.products.ProductService
+import com.example.server.profiles.ProfileService
+import com.example.server.ticketing.messages.Message
+import io.micrometer.observation.annotation.Observed
+import jakarta.transaction.Transactional
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Service
+
+
+@Service
+@Observed
+@Transactional
+class TicketServiceImpl (
+    private val ticketRepository: TicketRepository,
+    private val profileService: ProfileService,
+    private val productService: ProductService)
+    :TicketService {
+    override fun getAll(): List<Ticket> {
+        return ticketRepository.findAll()
+    }
+
+    override fun getById(ticketId: Long): Ticket {
+        val t = ticketRepository.findByIdOrNull(ticketId)
+        return t ?: throw NotFoundException("Ticket not found")
+    }
+
+    override fun createTicket(ticketDTO: TicketDTO): Ticket {
+        if (ticketDTO.id != null && ticketRepository.findByIdOrNull(ticketDTO.id) != null ) throw DuplicateException("Ticket already exists")
+        if (ticketDTO.statuses.size != 1 && ticketDTO.statuses.first() != States.OPEN) throw NotValidException("Ticket status is invalid")
+        val customer = profileService.getProfileByEmailP(ticketDTO.customer.email)
+        val technician = ticketDTO.technician?.email?.let {profileService.getProfileByEmailP(it)}
+        val product = productService.getByIdProduct(ticketDTO.product.productId)
+
+        val messages = mutableSetOf<Message>()
+
+        return ticketRepository.save(
+            Ticket(
+                product = product,
+                customer = customer,
+                technician = technician,
+                statuses = ticketDTO.statuses,
+                description = ticketDTO.description,
+                priority = ticketDTO.priority,
+                messages = messages
+            )
+
+        )
+    }
+
+    override fun editTicket(ticketId: Long, ticketDTO: TicketDTO): Ticket {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteTicket(ticketId: Long, ticket: TicketDTO): Ticket {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateStatus(ticketId: Long, state: States): Ticket {
+        TODO("Not yet implemented")
+    }
+
+
+}
