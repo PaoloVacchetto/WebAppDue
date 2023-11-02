@@ -54,15 +54,62 @@ class TicketServiceImpl (
     }
 
     override fun editTicket(ticketId: Long, ticketDTO: TicketDTO): Ticket {
-        TODO("Not yet implemented")
+        val ticket = getById(ticketId)
+        val customer = profileService.getProfileByEmailP(ticketDTO.customer.email)
+        val technician = ticketDTO.technician?.email?.let {profileService.getProfileByEmailP(it)}
+        val product = productService.getByIdProduct(ticketDTO.product.productId)
+
+        return ticketRepository.save(
+            Ticket(
+                id = ticket.id,
+                product = product,
+                customer = customer,
+                technician = technician,
+                statuses = ticketDTO.statuses,
+                description = ticketDTO.description,
+                priority = ticketDTO.priority,
+                messages = ticket.messages
+            )
+        )
     }
 
     override fun deleteTicket(ticketId: Long, ticket: TicketDTO): Ticket {
-        TODO("Not yet implemented")
+        val ticket = getById(ticketId)
+        ticketRepository.deleteById(ticketId)
+        return ticket
     }
 
     override fun updateStatus(ticketId: Long, state: States): Ticket {
-        TODO("Not yet implemented")
+        val ticket = getById(ticketId)
+        when (ticket.statuses.last()) {
+            States.OPEN -> {
+                if (state != States.RESOLVED && state != States.CLOSED && state != States.IN_PROGRESS) throw NotValidException(
+                    "Invalid status"
+                )
+            }
+
+            States.CLOSED -> {
+                if (state != States.RESOLVED) throw NotValidException("Invalid status")
+            }
+
+            States.IN_PROGRESS -> {
+                if (state != States.OPEN && state != States.CLOSED && state != States.RESOLVED) throw NotValidException(
+                    "Invalid status"
+                )
+            }
+
+            States.REOPEN -> {
+                if (state != States.IN_PROGRESS && state != States.RESOLVED) throw NotValidException("Invalid status")
+            }
+
+            States.RESOLVED -> {
+                if (state != States.REOPEN && state != States.CLOSED) throw NotValidException("Invalid status")
+            }
+        }
+        ticket.statuses.add(state)
+        return ticketRepository.save(
+            ticket
+        )
     }
 
 
