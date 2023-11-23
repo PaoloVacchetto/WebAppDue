@@ -2,12 +2,17 @@ package com.example.server.profiles
 
 import jakarta.persistence.*
 
+enum class Roles {
+    CUSTOMER, ADMIN, MANAGER, TECHNICIAN
+}
+
 
 @Entity
-@Table(name = "profile")
+@Table(name = "profiles")
 class Profile(
     @Id var email:String,
     var name: String,
-    var role: String,
+    @Enumerated(value = EnumType.STRING)
+    var role: Roles = Roles.CUSTOMER,
     var phone: String,
 )

@@ -1,10 +1,9 @@
 package com.example.server.products
 
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import com.example.server.NotValidException
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api")
@@ -15,8 +14,15 @@ class ProductController(private val productService: ProductService) {
         return productService.getAll()
     }
 
-    @GetMapping("/products/{productId}")
-    fun getProduct(@PathVariable productId:String) : ProductDTO? {
-        return productService.getProduct(productId)
+    @GetMapping("/products/{ean}")
+    fun getProduct(@PathVariable ean:String) : ProductDTO? {
+        return productService.getProduct(ean)
+    }
+
+    @PostMapping("/products")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun addProduct(@RequestBody productDTO: ProductDTO?): ProductDTO {
+        if (productDTO == null) throw NotValidException("Product was malformed")
+        return productService.addProduct(productDTO)
     }
 }

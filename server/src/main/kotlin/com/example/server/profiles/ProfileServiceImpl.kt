@@ -31,7 +31,7 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository) : Pro
     }
 
     override fun editProfile(profileDTO: ProfileDTO, email : String): ProfileDTO {
-        if (profileRepository.findByIdOrNull(email) != null) throw NotFoundException("User not found")
+        if (profileRepository.findByIdOrNull(email) == null) throw NotFoundException("User not found")
         return profileRepository.save(
             Profile(
                 email = profileDTO.email,

@@ -35,7 +35,7 @@ class TicketServiceImpl (
         if (ticketDTO.statuses.size != 1 && ticketDTO.statuses.first() != States.OPEN) throw NotValidException("Ticket status is invalid")
         val customer = profileService.getProfileByEmailP(ticketDTO.customer.email)
         val technician = ticketDTO.technician?.email?.let {profileService.getProfileByEmailP(it)}
-        val product = productService.getByIdProduct(ticketDTO.product.productId)
+        val product = productService.getByIdProduct(ticketDTO.product.ean)
 
         val messages = mutableSetOf<Message>()
 
@@ -57,7 +57,7 @@ class TicketServiceImpl (
         val ticket = getById(ticketId)
         val customer = profileService.getProfileByEmailP(ticketDTO.customer.email)
         val technician = ticketDTO.technician?.email?.let {profileService.getProfileByEmailP(it)}
-        val product = productService.getByIdProduct(ticketDTO.product.productId)
+        val product = productService.getByIdProduct(ticketDTO.product.ean)
 
         return ticketRepository.save(
             Ticket(
