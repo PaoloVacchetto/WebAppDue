@@ -1,6 +1,6 @@
 import {Button, Container, Nav, Navbar} from "react-bootstrap";
 
-function Navigation() {
+function Navigation(props) {
     //const navigate = useNavigate();
     return (
         <>
@@ -9,15 +9,11 @@ function Navigation() {
 
             <Navbar fixed="top" bg="primary" variant="dark">
                 <Container fluid>
-                    <Navbar.Brand style={{ cursor: 'pointer' }}  >Piano di Studi</Navbar.Brand>
+                    <Navbar.Brand style={{ cursor: 'pointer' }} >Ticketing service</Navbar.Brand>
 
                     <Nav>
 
-
-
-                                <Button  variant='outline-light' size='sm' >Login</Button>
-
-
+                        {props.loggedIn === true  ?  <Button  variant='outline-light' size='sm' >Login</Button> : null   }
                     </Nav>
 
                 </Container>

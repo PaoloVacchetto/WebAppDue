@@ -1,0 +1,33 @@
+#container_login{
+
+
+}
+#row {
+
+    width: 50%;
+    align-content: center;
+    margin: 0 auto 0 auto;
+}
+#login_button {
+    margin: 0 auto 0 auto;
+
+}
+#email, #password {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+#form {
+    padding: 1em;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5%;
+    background-color: bisque;
+}
+
+#col {
+    width: 50%;
+}
+
+#button_div {
+    align-items: center;
+}

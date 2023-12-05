@@ -18,7 +18,17 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "install": "npm run build && npm run delete && npm run create && npm run copy && npm run deleteAfter && npm run createAfter",
+    "delete": "rd /s /q .\\\"../server/src/main/resources/static",
+    "create" : "mkdir .\\\"../server/src/main/resources/static",
+    "copy" : "xcopy /s .\\build ..\\server\\src\\main\\resources\\static ",
+    "deleteAfter" : "rd /s /q .\\\"../client/build",
+    "createAfter" : "mkdir .\\\"../client/build"
+
+
+
+
   },
   "eslintConfig": {
     "extends": [

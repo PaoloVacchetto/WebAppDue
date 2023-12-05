@@ -2,17 +2,17 @@ import { Row } from "react-bootstrap";
 import { Outlet } from "react-router-dom";
 import Navigation from "./Navigation";
 
-function Layout() {
+function Layout(props) {
     return (
         <>
             {/* -- NAVIGATION BAR -- */}
             <Row className = "g-0">
-                <Navigation />
+                <Navigation props={props}/>
             </Row>
 
             {/* -- BODY  -- */}
-            <div className = "row gx-0" id = "bg">
-                <div className = "row gx-0">
+            <div className = "below-nav" id = "bg">
+                <div>
                     <Outlet />
                 </div>
             </div>
